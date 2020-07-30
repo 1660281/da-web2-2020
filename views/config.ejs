@@ -1,0 +1,21 @@
+<% title = "Trang cấu hình" %>
+<%- include('header') %>
+<h3 class="text-center" style="margin: 20px;">Cấu hình</h3>
+<form action="/config" method="POST">
+    <div class="form-group row">
+        <label for="home" class="col-sm-2 col-form-label text-right font-weight-bold">Nội dung Home</label>
+        <input type="text" class="form-control col" id="home" name="home" value="<%- message.home %>" required>
+    </div>
+    <div class="form-group row">
+        <label for="acceptConference" class="col-sm-2 col-form-label text-right font-weight-bold">Nội dung hồi đáp tham gia</label>
+        <input type="text" class="form-control col" id="acceptConference" name="acceptConference" value="<%- message.acceptConference %>" required>
+    </div>
+    <div class="form-group row">
+        <label for="notAcceptConference" class="col-sm-2 col-form-label text-right font-weight-bold">Nội dung hồi đáp KHÔNG tham gia</label>
+        <input type="text" class="form-control col" id="notAcceptConference" name="notAcceptConference" value="<%- message.notAcceptConference %>" required>
+    </div>
+    <div class="form-group row">
+        <button type="submit" class="btn btn-primary col-sm-2 offset-sm-2">Chấp nhận</button>
+    </div>
+</form>
+<%- include('footer') %>
