@@ -1,6 +1,6 @@
 const nodeMailer = require('nodemailer')
 // Những thông tin dưới đây các bạn có thể ném nó vào biến môi trường env nhé.
-// Vì để demo nên mình để các biến const ở đây.
+// Vì để demo nên mình để các biến const ở đây..
 const adminEmail = 'tk1660281'
 const adminPassword = '123'
 // Mình sử dụng host của google - gmail
