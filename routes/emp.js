@@ -117,3 +117,47 @@ router.post('/empUpdateUserState', asyncHandler(async function (req, res, next) 
     }
 }));
 
+router.post('/empUpdateUser', upload.single('crePic'), asyncHandler(async function (req, res, next) {
+    try {
+        user = {};
+        msg = {};
+        if (req.body) {
+            //    console.log('post empUpdateUser req.body: ' + JSON.stringify(req.body));
+            user = {
+                id: parseInt(req.body.id),
+                fullName: req.body.fullName,
+                creType: req.body.creType,
+                creID: req.body.creID,
+                creGrantDate: req.body.creGrantDate,
+                email: req.body.email,
+                state: parseInt(req.body.state),
+                crePic: null
+            };
+        }
+        if (req.file) {
+            //    console.log('post empUpdateUser req.file: ' + JSON.stringify(req.file));
+            user.crePic = req.file.path;
+        }
+        console.log(' -----------> ');
+        console.log(user);
+        rowUpdate = await funcs.updateUser(user);
+        if (rowUpdate > 0) {
+            msg = {
+                class: 'success',
+                text: 'Cập nhật thành công !'
+            };
+        }
+        else {
+            msg = {
+                class: 'danger',
+                text: 'Cập nhật thất bại ...'
+            };
+        }
+        console.log(msg);
+        res.redirect(`/empViewUser?id=${user.id}&msgClass=${msg.class}&msgText=${msg.text}`);
+    } catch (error) {
+        res.send(error);
+    }
+}));
+
+module.exports = router;
