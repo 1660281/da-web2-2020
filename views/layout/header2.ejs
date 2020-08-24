@@ -1,0 +1,67 @@
+<%- include('lib') %>
+
+<style>
+    div#sidebar>a:hover {
+        /* filter: opacity(100%); */
+        background-color: rgb(165, 68, 255);
+    }
+
+    a.my-item-active {
+        filter: opacity(100%);
+        background-color: rgb(164, 43, 189);
+        color: white;
+        height: 50px;
+        line-height: 50px;
+        width: 100%;
+        margin: 0;
+        padding: 0px 0px 0px 50px;
+        text-decoration: none;
+        vertical-align: middle;
+        font-size: large;
+    }
+    a.my-item {
+        filter: opacity(50%);
+        background-color: inherit;
+        color: azure;
+        height: 50px;
+        line-height: 50px;
+        width: 100%;
+        margin: 0;
+        padding: 0px 0px 0px 50px;
+        text-decoration: none;
+        vertical-align: middle;
+        font-size: large;
+    }
+
+    div#sidebar>hr {
+        margin: 0;
+    }
+</style>
+
+<body>
+    <div class="row h-100 w-100 m-0">
+        <div id="sidebar" class="col-3 h-100 position-fixed px-0"
+            style="background-image:linear-gradient(rgb(106, 8, 197), rgb(163, 48, 163)); color: azure;">
+            <div class="row h-30 justify-content-center px-1 py-5">
+                <h1>TKBank</h1>
+            </div>
+            <hr>
+            <a class="row my-item<%- locals.page=='index'?'-active':'' %>" href="/emp">
+                Danh sách khách hàng
+            </a>
+            <hr>
+            <a class="row my-item<%- locals.page=='empViewUser'?'-active':'' %>" href="/empViewUser?id=<%- emp.id %> ">
+                Thông tin cá nhân
+            </a>
+            <hr>
+            <a class="row my-item" href="#">
+                Cài đặt
+            </a>
+            <hr>
+            <a class="row my-item" href="/logout">
+                Đăng xuất
+            </a>
+            <hr>
+        </div>
+
+        <div class="col-9 offset-3" style="padding: 0px; background-color: lavender;">
