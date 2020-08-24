@@ -1,0 +1,1 @@
+this folder to store your .js file to make a class to access db

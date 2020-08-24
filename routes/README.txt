@@ -1,0 +1,1 @@
+this folder will be store your .js file to routes your website
