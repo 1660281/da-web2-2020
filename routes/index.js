@@ -13,3 +13,6 @@ router.get('/', asyncHandler( async function getIndex(req, res, next) {
     console.log(req.session.user);
     res.render('index/index', {user});
 }));
+
+
+module.exports = router;	
