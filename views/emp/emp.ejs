@@ -1,0 +1,111 @@
+<% title = 'Trang nội bộ TKBank' %>
+<%- include('../layout/header2')%>
+
+<form action="/emp" method="POST">
+    <div class="row w-100 m-0 pt-3 sticky-top header">
+        <div class="col-3 pt-1">
+            <h5>Xin chào <a href="/empViewUser?id=<%- emp.id %>"
+                    class="badge badge-pill badge-light c-blueviolet"><%- emp.fullName.split(' ').pop() %></a> !</h5>
+        </div>
+        <div class="col-2 px-0">
+            <select id="keyType" name="keyType" class="form-control">
+                <option value="0">ID</option>
+                <option value="1">Email</option>
+                <option value="2" selected>Họ tên</option>
+            </select>
+        </div>
+        <div class="col px-0">
+            <input id="key" name="key" class="form-control mr-sm-2" type="search" placeholder="Họ tên, số tài khoản, ..."
+                aria-label="Search">
+        </div>
+        <div class="col-2 px-0">
+            <!-- <button id="btnSearch" class="btn btn-outline-light my-2 my-sm-0 bg-c-blueviolet">Tìm kiếm</button> -->
+            <input type="submit" id="btnSearch" class="btn btn-outline-light my-2 my-sm-0 bg-c-blueviolet"
+                value="Tìm kiếm">
+        </div>
+        <hr>
+    </div>
+</form>
+
+<div class="row w-100 m-0">
+    <div class="col pt-1">
+        <hr>
+        <div id="tbUserFound">
+            <%- include(locals.page) %>
+        </div>
+        <script>
+            // $('#btnSearch').on('click', function () {
+            //     var data = {
+            //         keyType: $('#keyType').val(),
+            //         key: $('#key').val()
+            //     };
+            //     $.ajax({
+            //         method: 'POST',
+            //         data: data,
+            //         url: '/emp',
+            //         success: function (data) {
+            //             console.log('ajax /emp success ...');
+            //             // var user = JSON.stringify(data.data);
+            //             var users = JSON.parse(data.data);
+            //             console.log(users);
+
+            //             if (users && users.length > 0) {
+            //                 alert(`Tìm thấy ${users.length} người dùng phù hợp `);
+            //                 $('#tbUserFound').html(strRow(users));
+            //             }
+            //             else {
+            //                 alert('Không tìm thấy!');
+            //             }
+            //         },
+            //         error: function (err) {
+            //             console.log('ajax /emp error ...');
+            //             console.log(err);
+            //             alert('emp: Có lỗi xảy ra');
+            //         }
+            //     });
+            // });
+
+
+            function strRow(users) {
+                console.log(users);
+                var html;
+                if (!users || users.length == 0) {
+                    html = '';
+                }
+                else {
+
+                    html = '<div class="mb-5 px-5"><table class="table table-striped"><thead><tr>'
+                        + '<th scope="col">ID</th>'
+                        + '    <th scope="col">Giấy tờ</th>'
+                        + '    <th scope="col">Họ & tên</th>'
+                        + '    <th scope="col">Email</th>'
+                        + '    <th scope="col">Tình trạng</th>'
+                        + '</tr></thead><tbody>';
+
+                    users.forEach(user => {
+                        html += '<tr><td scope="col">' + user.id
+                            + '</td><td scope="col"><img src="/' + user.crePic
+                            + '" width="50" height="50"></td><td scope="col"><a href="/empViewUser?id=' + user.id + '">' + user.fullName
+                            + '</a></td><td scope="col">' + user.email
+                            + '</td><td scope="col"><button id="btnVerify-' + user.id + '" value="' + user.id + '" class="btn btn-success ' + (user.state == 1 ? 'disabled' : '')
+                            + '">Xác thực</button><button id="btnBlock-' + user.id + '" value="' + user.id + '" class="btn btn-danger ' + (user.state == -1 ? 'disabled' : '')
+                            + '">Khóa</button></td></tr>';
+                    });
+
+                    html += '</tbody></table></div>';
+                }
+                return html;
+            }
+
+            // Execute a function when the user releases a key on the keyboard
+            document.getElementById("key").addEventListener("keyup", function (event) {
+                // Number 13 is the "Enter" key on the keyboard
+                if (event.keyCode === 13) {
+                    // Cancel the default action, if needed
+                    event.preventDefault();
+                    // Trigger the button element with a click
+                    document.getElementById("btnSearch").click();
+                }
+            });
+        </script>
+        <%- include('../layout/footer2')%>
