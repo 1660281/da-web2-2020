@@ -1,0 +1,94 @@
+<div class="mb-5 px-5">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Giấy tờ</th>
+                <th scope="col">Họ & tên</th>
+                <th scope="col">Email</th>
+                <th scope="col">Tình trạng</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% users.forEach(user => { %>
+            <tr>
+                <td scope="col">
+                    <%- user.id %>
+                </td>
+                <td scope="col">
+                    <img src="/<%- user.crePic %> " width="50" height="50">
+                </td>
+                <td scope="col">
+                    <a href="/empViewUser?id=<%- user.id %> "><%- user.fullName %></a>
+                </td>
+                <td scope="col">
+                    <%- user.email %>
+                </td>
+                <td scope="col">
+                    <button id="btnVerify-<%- user.id %>" value="<%- user.id %>" class="btn btn-success <% if (user.state == 1) { %> disabled <% } %> ">Xác thực</button>
+                    <button id="btnBlock-<%- user.id %>" value="<%- user.id %>" class="btn btn-danger <% if (user.state == -1) { %> disabled <% } %> "">Khóa</button>
+                </td>
+            </tr>
+            <% }) %>
+        </tbody>
+    </table>
+</div>
+<nav aria-label=" Page navigation example">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" href="/emp?page=1">1</a></li>
+        <li class="page-item"><a class="page-link" href="/emp?page=2">2</a></li>
+        <li class="page-item"><a class="page-link" href="/emp?page=3">3</a></li>
+        <li class="page-item">
+            <a class="page-link" href="#">Next</a>
+        </li>
+    </ul>
+</nav>
+<script>
+    $('.btn').click(function () {
+        state = 0;
+        var btn = $(this), btnAnother;
+        if (btn.hasClass('disabled') || (btn.attr('id').indexOf('btnVerify') < 0 && btn.attr('id').indexOf('btnBlock') < 0)) return;
+        id = btn.val();
+        className = $(this).attr('class');
+        if (className.indexOf('success') >= 0) {   // xác thực cho người dùng
+            state = 1;
+            btnAnother = $('#btnBlock-' + id);
+        }
+        else if (className.indexOf('danger') >= 0) {    // khóa tài khoản người dùng
+            state = -1;
+            btnAnother = $('#btnVerify-' + id);
+        }
+
+        console.log('ajax /empUpdateUserState ...');
+        $.ajax({
+            url: '/empUpdateUserState',
+            method: 'POST',
+            data: { id, state },
+            success: function (data) {
+                console.log('success');
+                if (data == '1') {
+                    if (state == 1) {
+                        alert('Xác thực thành công');
+                    }
+                    else {
+                        alert('Đã khóa tài khoản người dùng');
+                    }
+                    btn.addClass('disabled');
+                    btnAnother.removeClass('disabled');
+                    console.log(btn);
+                    // $('button.btn select option[value="' + id + '"').attr('disabled',true);
+                }
+                else {
+                    alert('Thất bại');
+                }
+            },
+            error: function (err) {
+                alert('emUpdateUserState: Có lỗi xảy ra');
+                console.log(err);
+            }
+        });
+    });
+</script>

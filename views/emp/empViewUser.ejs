@@ -1,0 +1,165 @@
+<% if (user == null) { %>
+<div class="row h-100 justify-content-center">
+    <h5>Không tìm thấy người dùng</h5>
+</div>
+<% } else { %>
+<!-- enctype="multipart/form-data" -->
+<form id="frmInfo" action="/empUpdateUser" method="POST" enctype="multipart/form-data" class="mb-5 px-5">
+    <input id="id" name="id" hidden value="<%- user.id %>">
+    <h4 id="hTitle" class="text-center mt-3 mb-5">Thông tin cá nhân</h4>
+    <div class="row m-0" style="height: 65%;">
+        <div class="col-6 ml-3 my-0 mr-0 px-2">
+            <div style="height:80%" class="row my-1 mx-0">
+                <div class="col-10 offset-1">
+                    <img style="border-radius:10%" src="/<%- user.crePic %> " width="100%" height="100%">
+                </div>
+            </div>
+            <div class="row h-20 my-1 mx-0">
+                <div id="divUploadCrePic" class="col-10 offset-1 input-group mb-3">
+                    <div class="input-group-prepend">
+                        <span class="input-group-text">Tải ảnh</span>
+                    </div>
+                    <div class="custom-file">
+                        <input type="file" name="crePic" class="custom-file-input" id="crePic">
+                        <label class="custom-file-label" for="crePic">Chưa chọn ảnh ...</label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col mx-0 mt-3" style="font-size: 18;">
+            <div class="row">
+                <label class="col-4 my-1" for="fullName">Họ & tên :</label>
+                <input id="fullName" name="fullName" type="text" class="col-5 my-1 form-control"
+                    value="<%- user.fullName %>" maxlength="50" />
+            </div>
+            <div class="row">
+                <select id="creType" name="creType" class="col-3 my-1 form-control">
+                    <option value="1" <%- user.creType == 1 ? 'selected': ''%>>CMND</option>
+                    <option value="2" <%- user.creType == 2 ? 'selected': ''%>>CCCD</option>
+                    <option value="3" <%- user.creType == 3 ? 'selected': ''%>>Hộ chiếu</option>
+                </select>
+                <input id="creID" name="creID" type="number" class="col-4 offset-1 my-1 form-control "
+                    value="<%- user.creID %>" maxlength="50" />
+            </div>
+            <div class="row">
+                <label class="col-4 my-1" for="creGrantDate">Ngày cấp :</label>
+                <input id="creGrantDate" name="creGrantDate" type="date" class="col-5 my-1 form-control "
+                    value="<%- user.creGrantDate.toJSON().substr(0,10)%>" />
+            </div>
+            <div class="row">
+                <label class="col-4 my-1" for="email">Email :</label>
+                <input id="email" name="email" type="email" class="col-5 my-1 form-control " value="<%- user.email %>"
+                    maxlength="50" />
+            </div>
+            <div class="row">
+                <label class="col-4 my-1" for="state">Tình trạng :</label>
+                <select id="state" name="state" class="col-4 my-1 form-control ">
+                    <option value="0" <%- user.state == 0 ? 'selected': ''%>>Chưa xác thực</option>
+                    <option value="1" <%- user.state == 1 ? 'selected': ''%>>Đã xác thực</option>
+                    <option value="-1" <%- user.state == -1 ? 'selected': ''%>>Khóa</option>
+                </select>
+            </div>
+            <div class="row mt-3">
+                <% if (locals.msg && locals.msg != null) { %>
+                <div class="col-9 ">
+                    <span class="w-100 badge badge-<%- msg.class %>"> <%- msg.text %> </span>
+                </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4 offset-4">
+            <input id="btnCapNhat" type="submit" class="btn btn-primary w-100" value="Cập nhật">
+        </div>
+    </div>
+</form>
+<script>
+    debugger
+    var isViewEmp = '<%- user.id == emp.id %>';   //  người dùng mà trang đang hiển thị có phải là nhân viên đang đăng nhập hay không
+    if (isViewEmp == 'true') {
+        $("#frmInfo :input").prop("disabled", false);
+        $("#divUploadCrePic").show();
+        $("#btnCapNhat").show();
+        $('#hTitle').text("Cập nhật thông tin cá nhân");
+    }
+    else {
+        $("#frmInfo :input").prop("disabled", true);
+        $("#divUploadCrePic").hide();
+        $("#btnCapNhat").hide();
+        $('#hTitle').text("Xem và thay đổi trạng thái của khách hàng " + '<%- user.fullName %>');
+    }
+    $('#state').prop("disabled", false);
+    $('#btnCapNhat').click(function () {
+        var isFillAll = true;          // có điền đủ thông tin chưa
+        if (isViewEmp == 'true') {   // nhân viên đang cập nhật thông tin của chính mình
+            if ($('#fullName').val() == "") {
+                isFillAll = false;
+                alert('Bạn chưa nhập họ tên');
+                $('#fullName').focus();
+            }
+            if ($('#creID').val() == "") {
+                isFillAll = false;
+                alert('Bạn chưa nhập số giấy tờ');
+                $('#creID').focus();
+            }
+            if ($('#creGrantDate').val() == "") {
+                isFillAll = false;
+                alert('Bạn chưa nhập ngày cấp');
+                $('#creGrantDate').focus();
+            }
+            if ($('#email').val() == "") {
+                isFillAll = false;
+                alert('Bạn chưa nhập email');
+                $('#email').focus();
+            }
+        }
+        if (isFillAll == false) {
+            event.preventDefault();
+        }
+    });
+    $("#crePic").change(function () {
+        debugger
+        var label = $('label[for="' + $(this).attr('id') + '"]');
+        var fileName = ($(this).val()).split('\\').pop();
+        label.text(fileName);
+    });
+    $("#state").change(function () {
+        if (isViewEmp == 'false') {
+            $.ajax({
+                url: '/empUpdateUserState',
+                method: 'POST',
+                data: {
+                    id: parseInt($('#id').val()),
+                    state: parseInt($('#state').val())
+                },
+                success: function (data) {
+                    console.log('success');
+                    if (data == '1') {
+                        switch ($('#state').val()) {
+                            case '-1':
+                                alert('Đã khóa tài khoản người dùng');
+                                break;
+                            case '0':
+                                alert('Đã chuyển trạng thái chưa xác thực');
+                                break;
+                            case '1':
+                                alert('Xác thực thành công');
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                    else {
+                        alert('Thất bại');
+                    }
+                },
+                error: function (err) {
+                    alert('emUpdateUserState: Có lỗi xảy ra');
+                    console.log(err);
+                }
+            });
+        }
+    });
+</script>
+<% } %>
