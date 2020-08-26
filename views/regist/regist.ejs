@@ -1,0 +1,94 @@
+<% 
+    title = "Trang đăng ký";
+    layout = "../layout/";
+%> 
+<%- include ( layout + 'layout1') %>
+<script>
+    function btnDangKyClick() {
+        if ($('#email').val() == "") {
+            alert('Mời nhập email');
+            event.preventDefault();
+            $('#email').focus();
+        }
+        else if ($('#password').val() == "") {
+            alert('Mời nhập mật khẩu');
+            event.preventDefault();
+            $('#password').focus();
+        }
+        else if ($('#fullName').val() == "") {
+            alert('Mời nhập họ tên');
+            event.preventDefault();
+            $('#fullName').focus();
+        }
+        else if ($('#creID').val() == "") {
+            alert('Mời nhập số giấy tờ');
+            event.preventDefault();
+            $('#creID').focus();
+        }
+        else if ($('#creGrantDate').val() == "") {
+            alert('Mời nhập ngày cấp');
+            event.preventDefault();
+            $('#creGrantDate').focus();
+        }
+        else if ($('#crePic').val() == "") {
+            alert('Mời chọn hình ảnh');
+            event.preventDefault();
+            $('#crePic').focus();
+        }
+    }
+
+    // tạm gác lại việc control thời gian mà người dùng nhập vào
+    // $("#creGrantDate").change(function (){
+    //     debugger
+    //     var value = new Date($(this).val());
+    //     if (value > Date.now())
+    //     $(this).val((Date.now()).toJSON().substr(0,10));
+    // });
+</script>
+    <div class="row justify-content-center" style="margin-bottom:10%">
+        <h3>Đăng ký</h3>
+    </div>
+    <div class="container row" style="margin:0; padding:0;">
+        <form action="/regist" method="POST" enctype="multipart/form-data" class="col">
+            <div class="form-group row">
+                <label for="email" class="text-left col-4">Email</label>
+                <input type="email" class="form-control col" id="email" aria-describedby="emailHelp"
+                    placeholder="Email" name="email">
+            </div>
+            <div class="form-group row">
+                <label for="password" class="text-left col-4">Mật khẩu</label>
+                <input type="password" class="form-control col" id="password" placeholder="Password" name="password">
+            </div>
+            <div class="form-group row">
+                <label for="fullName" class="text-left col-4">Họ tên</label>
+                <input type="text" class="form-control col" id="fullName" placeholder="Họ tên đầy đủ"
+                    name="fullName">
+            </div>
+            <div class="form-group row">
+                <label for="creID" class="text-left col-4">
+                    <select id="creType" name="creType" class="form-control">
+                        <option value="1" selected>CMND</option>
+                        <option value="2">CCCD</option>
+                        <option value="3">Hộ chiếu</option>
+                    </select>
+                </label>
+                <input type="number" class="form-control col" id="creID" placeholder="Số giấy tờ" name="creID">
+            </div>
+            <div class="form-group row">
+                <label for="creGrantDate" class="text-left col-4">Ngày cấp</label>
+                <input type="date" class="form-control col" id="creGrantDate" name="creGrantDate">
+            </div>
+            <div class="form-group row">
+                <label for="creGrantDate" class="text-left col-4">Hình ảnh</label>
+                <input type="file" class="form-control col py-1" id="crePic" name="crePic">
+            </div>
+            <div class="form-group form-check row">
+                <label class="text-left">
+                    Đã có tài khoản ? 
+                    <a href="/login">Đăng nhập</a>
+                </label>
+            </div>
+            <button type="submit" id="btnDangKy" onclick="btnDangKyClick()" onsubmit="return isValidForm()" class="btn btn-primary col-4 offset-3">Đăng ký</button>
+        </form>
+    </div>
+<%- include(layout + 'layout1-end') %> 
